@@ -27,17 +27,27 @@ public class IDataTypeAdapterFactory implements TypeAdapterFactory {
         return (TypeAdapter<T>) new TypeAdapter<IData>() {
             @Override
             public void write(JsonWriter jsonWriter, IData iData) throws IOException {
-                JsonElement jsonElement = switch (iData) {
-                    case PowerBoxDataWithAttachment dataWithAttachment ->
-                            powerBoxDataWithAttachmentAdapter.toJsonTree(dataWithAttachment);
-                    case PowerBoxDataWithSingleAttachment powerBoxDataWithSingleAttachment ->
-                            powerBoxDataWithSingleAttachmentTypeAdapter.toJsonTree(powerBoxDataWithSingleAttachment);
-                    case PowerBoxData powerBoxData -> powerBoxDataAdapter.toJsonTree(powerBoxData);
-                    case null ->
-                        throw new NullPointerException("IDataTypeAdapterFactory#create(Gson gson, TypeToken iData): null");
-                    default ->
-                            throw new JsonSyntaxException("Unsupported data type: " + iData.getClass().getName());
+                JsonElement jsonElement = switch (iData.getClass().getSimpleName()) {
+                    case "PowerBoxDataWithAttachment" ->
+                            powerBoxDataWithAttachmentAdapter.toJsonTree((PowerBoxDataWithAttachment) iData);
+                    case "PowerBoxDataWithSingleAttachment" ->
+                            powerBoxDataWithSingleAttachmentTypeAdapter.toJsonTree((PowerBoxDataWithSingleAttachment) iData);
+                    case "PowerBoxData" -> powerBoxDataAdapter.toJsonTree((PowerBoxData) iData);
+                    case "null" ->
+                            throw new NullPointerException("IDataTypeAdapterFactory#create(Gson gson, TypeToken iData): null");
+                    default -> throw new JsonSyntaxException("Unsupported data type: " + iData.getClass().getName());
                 };
+                //                JsonElement jsonElement = switch (iData) {
+//                    case PowerBoxDataWithAttachment dataWithAttachment ->
+//                            powerBoxDataWithAttachmentAdapter.toJsonTree(dataWithAttachment);
+//                    case PowerBoxDataWithSingleAttachment powerBoxDataWithSingleAttachment ->
+//                            powerBoxDataWithSingleAttachmentTypeAdapter.toJsonTree(powerBoxDataWithSingleAttachment);
+//                    case PowerBoxData powerBoxData -> powerBoxDataAdapter.toJsonTree(powerBoxData);
+//                    case null ->
+//                        throw new NullPointerException("IDataTypeAdapterFactory#create(Gson gson, TypeToken iData): null");
+//                    default ->
+//                            throw new JsonSyntaxException("Unsupported data type: " + iData.getClass().getName());
+//                };
                 elementAdapter.write(jsonWriter, jsonElement);
             }
 

@@ -86,7 +86,7 @@ public class ClientDLPBHandler extends AbstractDgLabPowerBoxHandler implements I
                     //初次连接客户端获取服务器指定id
                     SharedData.connectionId = data.getClientId();
                     logger.info("收到clientId: {}", ConnectionId());
-                    String qrCodeContext = "https://www.dungeon-lab.com/app-download.php#DGLAB-SOCKET#" + WebSocketClient.getUrl()  + ConnectionId();
+                    String qrCodeContext = "https://www.dungeon-lab.com/app-download.php#DGLAB-SOCKET#" + SharedData.getUrl()  + ConnectionId();
 //                    FilePathHelper.ReCreateHCJFile(qrCodeContext);
                     try {
                         CO.createQrCode(qrCodeContext);
